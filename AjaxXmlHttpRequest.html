@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer Ejemplo con Ayax</title>
+</head>
+<ol id="xhr"></ol>
+
+<body>
+
+    <script>
+        (() => {
+            const xhr = new XMLHttpRequest();
+            $xhr = document.getElementById("xhr"),
+                $frangment = document.createDocumentFragment();
+
+            xhr.addEventListener("readystatechange", (e) => {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log("exito");
+                    let json = JSON.parse(xhr.responseText);
+                    json.forEach(el => {
+                        let li = document.createElement("li");
+                        li.innerHTML = `${el.title}  <br>
+               <img src="${el.thumbnailUrl}" alt="Girl in a jacket">
+               `;
+                        $frangment.appendChild(li);
+
+                    });
+                    $xhr.appendChild($frangment);
+                } else {
+                    let message = xhr.statusText || "Ocurrio un error";
+                    $xhr.innerHTML = `Error ${xhr.status}: ${message} `;
+                    console.log("error");
+
+                }
+
+            });
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/photos");
+            xhr.send();
+        })();
+    </script>
+</body>
+
+</html>
